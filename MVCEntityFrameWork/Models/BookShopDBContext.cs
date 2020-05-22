@@ -23,10 +23,9 @@ namespace MVCEntityFrameWork.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new Author_BookMap());
+            modelBuilder.ApplyConfiguration(new Book_Map());
 
-            modelBuilder.Entity<Book>().HasKey(b => b.BookID);
-            modelBuilder.Entity<Book>().Property(b => b.Title).IsRequired();
-            modelBuilder.Entity<Book>().Property(b => b.Image).HasColumnType("image");
+
             modelBuilder.Entity<Author>().HasKey(k => k.AuthorID);
             modelBuilder.Entity<Discount>().HasKey(k => k.BookID);
             modelBuilder.Entity<Customer>().Property(p => p.FirstName).HasColumnName("fname");
@@ -38,16 +37,7 @@ namespace MVCEntityFrameWork.Models
             modelBuilder.Entity<Provice>().HasKey(p => p.ProvinceID);
 
 
-            modelBuilder.Entity<Book>()
-                .HasOne(p => p.SubCategory)
-                .WithMany(b => b.Books)
-                .HasForeignKey(f => f.SCategoryID);
-
-
-            modelBuilder.Entity<Book>()
-                .HasOne(d => d.Discount)
-                .WithOne(b => b.Book)
-                .HasForeignKey<Discount>(f => f.BookID);
+            
 
 
 

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MVCEntityFrameWork.Migrations
 {
     [DbContext(typeof(BookShopDBContext))]
-    [Migration("20200522171954_Generate DB2")]
-    partial class GenerateDB2
+    [Migration("20200522175139_GenerateDb2")]
+    partial class GenerateDb2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
