@@ -19,6 +19,9 @@ namespace MVCEntityFrameWork.Models
         public string File { get; set; }
 
         public byte[] Image { get; set; }
+
+        public Publisher publisher { get; set; }
+
         public int LanguageID { get; set; }
 
 
@@ -65,6 +68,13 @@ namespace MVCEntityFrameWork.Models
     {
         public int LanguageID { get; set; }
         public string LanguageName { get; set; }
+
+        public List<Book> Books { get; set; }
+    }
+    public class Publisher
+    {
+        public int PublisherID { get; set; }
+        public string PublisherName { get; set; }
 
         public List<Book> Books { get; set; }
     }
