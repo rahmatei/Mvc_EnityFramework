@@ -24,6 +24,7 @@ namespace MVCEntityFrameWork.Models
         {
             modelBuilder.ApplyConfiguration(new Author_BookMap());
             modelBuilder.ApplyConfiguration(new Book_Map());
+            modelBuilder.ApplyConfiguration(new Book_TranslatorMap());
 
 
             modelBuilder.Entity<Author>().HasKey(k => k.AuthorID);

@@ -33,8 +33,27 @@ namespace MVCEntityFrameWork.Models
         public Discount Discount { get; set; }
         public List<Author_Book> Author_Books { get; set; }
         public List<Order_Book> Order_Books { get; set; }
+
+        public List<Book_Translator> Book_Translator { get; set; }
     }
 
+    public class Book_Translator
+    {
+        public int BookID { get; set; }
+        public int TranslatorID { get; set; }
+
+        public Book Book { get; set; }
+        public Translator Translator { get; set; }
+    }
+
+    public class Translator
+    {
+        public int TranslatorID { get; set; }
+        public string Name { get; set; }
+        public string Family { get; set; }
+
+        public List<Book_Translator> Book_Translator { get; set; }
+    }
     public class Author_Book
     {
 
