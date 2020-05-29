@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using MVCEntityFrameWork.Models;
 
 namespace MVCEntityFrameWork.Areas.Admin.Controllers
@@ -73,6 +74,35 @@ namespace MVCEntityFrameWork.Areas.Admin.Controllers
                 return RedirectToAction("index");
             }
             return View(translator);
+        }
+
+        public async Task<IActionResult> Delete (int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                var transalate = await _context.Translator.FirstOrDefaultAsync(p=>p.TranslatorID==id);
+                if (transalate == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    return View(transalate);
+                }
+            }
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Deleted(int? TranslatorID)
+        {
+            var Translate = await _context.Translator.FindAsync(TranslatorID);
+            _context.Translator.Remove(Translate);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("index");
         }
     }
 }
