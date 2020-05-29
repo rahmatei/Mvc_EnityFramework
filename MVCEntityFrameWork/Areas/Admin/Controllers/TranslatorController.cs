@@ -30,6 +30,7 @@ namespace MVCEntityFrameWork.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Translator translator)
         {
             if (ModelState.IsValid)
@@ -37,6 +38,39 @@ namespace MVCEntityFrameWork.Areas.Admin.Controllers
                 _context.Add(translator);
                 await _context.SaveChangesAsync();
                     return RedirectToAction("Index");
+            }
+            return View(translator);
+        }
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                var translate = await _context.Translator.FirstOrDefaultAsync(p => p.TranslatorID == id);
+                if (translate == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    return View(translate);
+                }
+                
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Translator translator)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Translator.Update(translator);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("index");
             }
             return View(translator);
         }
