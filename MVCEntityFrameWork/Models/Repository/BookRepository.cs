@@ -15,6 +15,19 @@ namespace MVCEntityFrameWork.Models.Repository
             _context = context;
         }
 
+        public List<TreeViewCategory> GenerateAllTree()
+        {
+            var Categories = (from c in _context.Categories
+                              where (c.ParentCategoryID == null)
+                              select new TreeViewCategory { CategoryID = c.CategoryID, CategoryName = c.CategoryName }).ToList();
+
+            foreach (var item in Categories)
+            {
+                BindSubCategory(item);
+            }
+            return Categories;
+        }
+
         public void BindSubCategory(TreeViewCategory category)
         {
             var subcategory = (from c in _context.Categories

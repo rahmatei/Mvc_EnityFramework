@@ -25,6 +25,7 @@ namespace MVCEntityFrameWork.Models
         public DateTime? PublishDate { get; set; }
         public int PublishYear { get; set; }
         public bool? Delete { get; set; }
+        public int PublisherID { get; set; }
 
         public byte[] Image { get; set; }
 

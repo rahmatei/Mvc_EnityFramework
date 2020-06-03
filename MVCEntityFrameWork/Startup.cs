@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Localization;
 using MVCEntityFrameWork.Models;
 using MVCEntityFrameWork.Models.Repository;
 
@@ -36,7 +37,16 @@ namespace MVCEntityFrameWork
 
             services.AddTransient<BookRepository>();
             services.AddDbContext<BookShopDBContext>(option => option.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddLocalization(options => { options.ResourcesPath = "Resources"; });
+            services.AddMvc(options =>
+            {
+                var F = services.BuildServiceProvider().GetService<IStringLocalizerFactory>();
+                var L = F.Create("ModelBindingMessages", "MVCEntityFrameWork");
+                options.ModelBindingMessageProvider.SetValueMustNotBeNullAccessor(
+                 (x) => L["انتخاب یکی از موارد لیست الزامی است."]);
+
+            });
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
