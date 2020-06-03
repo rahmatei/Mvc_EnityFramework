@@ -26,6 +26,7 @@ namespace MVCEntityFrameWork.Models
             modelBuilder.ApplyConfiguration(new Author_BookMap());
             modelBuilder.ApplyConfiguration(new Book_Map());
             modelBuilder.ApplyConfiguration(new Book_TranslatorMap());
+            modelBuilder.ApplyConfiguration(new Book_CategoryMap());
 
 
             modelBuilder.Entity<Author>().HasKey(k => k.AuthorID);
@@ -46,7 +47,6 @@ namespace MVCEntityFrameWork.Models
         }
         public DbSet<Book> Books { get; set; }
         public DbSet<Category> Categories { get; set; }
-        public DbSet<SubCategory> SubCategories { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Author> Authors { get; set; }
         public DbSet<City> Cities { get; set; }
@@ -57,6 +57,8 @@ namespace MVCEntityFrameWork.Models
         public DbSet<Discount> Discounts { get; set; }
         public DbSet<OrderStatus> OrderStatuses { get; set; }
         public DbSet<Customer> Customers { get; set; }
-        public DbSet<MVCEntityFrameWork.Models.Translator> Translator { get; set; }
+        public DbSet<Translator> Translator { get; set; }
+        public DbSet<Publisher> Publishers { get; set; }
+        public DbSet<Book_Category> Book_Categories { get; set; }
     }
 }

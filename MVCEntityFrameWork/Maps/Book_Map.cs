@@ -16,11 +16,6 @@ namespace MVCEntityFrameWork.Maps
             Builder.HasKey(b => b.BookID);
             Builder.Property(b => b.Title).IsRequired();
             Builder.Property(b => b.Image).HasColumnType("image");
-            Builder
-                .HasOne(p => p.SubCategory)
-                .WithMany(b => b.Books)
-                .HasForeignKey(f => f.SCategoryID);
-
 
             Builder
                 .HasOne(d => d.Discount)

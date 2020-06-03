@@ -4,14 +4,16 @@ using MVCEntityFrameWork.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MVCEntityFrameWork.Migrations
 {
     [DbContext(typeof(BookShopDBContext))]
-    partial class BookShopDBContextModelSnapshot : ModelSnapshot
+    [Migration("20200603103300_Remove Sub Category and Add Releation Self")]
+    partial class RemoveSubCategoryandAddReleationSelf
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -53,26 +55,14 @@ namespace MVCEntityFrameWork.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<bool?>("Delete");
-
                     b.Property<string>("File");
-
-                    b.Property<string>("ISBN");
 
                     b.Property<byte[]>("Image")
                         .HasColumnType("image");
 
-                    b.Property<bool?>("IsPublish");
-
                     b.Property<int>("LanguageID");
 
-                    b.Property<int>("NumOfPages");
-
                     b.Property<int>("Price");
-
-                    b.Property<DateTime?>("PublishDate");
-
-                    b.Property<int>("PublishYear");
 
                     b.Property<int?>("PublisherID");
 
@@ -82,8 +72,6 @@ namespace MVCEntityFrameWork.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired();
-
-                    b.Property<short>("Weight");
 
                     b.HasKey("BookID");
 
