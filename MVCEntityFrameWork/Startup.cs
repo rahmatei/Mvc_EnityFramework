@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MVCEntityFrameWork.Models;
+using MVCEntityFrameWork.Models.Repository;
 
 namespace MVCEntityFrameWork
 {
@@ -33,7 +34,7 @@ namespace MVCEntityFrameWork
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-
+            services.AddTransient<BookRepository>();
             services.AddDbContext<BookShopDBContext>(option => option.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

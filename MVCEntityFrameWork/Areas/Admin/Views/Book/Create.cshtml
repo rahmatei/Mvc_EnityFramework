@@ -1,4 +1,5 @@
-﻿
+﻿@model MVCEntityFrameWork.Models.ViewModels.BookCreateViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_Admin.cshtml";
@@ -43,21 +44,15 @@
                             </div>
                             <div class="card-body">
                                 <ul id="category" class="demo1">
-                                    <li><input type="checkbox" /> عمومی</li>
+                                    @foreach (var item in Model.Categories)
+                                    {
                                     <li>
-                                        <input type="checkbox" /> هنر
-                                        <ul>
-                                            <li>
-                                                <input type="checkbox" /> نقاشی
-                                                <ul>
-                                                    <li><input type="checkbox" /> نقاشی روی پارچه</li>
-                                                    <li><input type="checkbox" /> نقاشی روی سفال</li>
-                                                </ul>
-                                            </li>
-                                            <li><input type="checkbox" /> خطاطی</li>
-                                        </ul>
+                                        <input type="checkbox" name="CategoryID" value="@item.CategoryID" /> @item.CategoryName
+                                        @await Html.PartialAsync("_SubCategories", item.SubCategories)
                                     </li>
-                                    <li><input type="checkbox" /> فنی مهندسی</li>
+                                    }
+
+                                    
                                 </ul>
 
                             </div>
