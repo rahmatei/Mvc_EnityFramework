@@ -1,4 +1,5 @@
-﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+﻿@model IEnumerable<MVCEntityFrameWork.Models.ViewModels.BooksIndexViewModel>;
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Admin.cshtml";
@@ -101,6 +102,8 @@
                                     <th>عنوان</th>
                                     <th>شابک</th>
                                     <th>ناشر</th>
+                                    <th>نویسندگان</th>
+                                    <th>مترجمان</th>
                                     <th class="text-center">قیمت (ریال)</th>
                                     <th class="text-center">تاریخ انتشار در سایت</th>
                                     <th style="width:25px;">وضعیت</th>
@@ -108,38 +111,35 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td class="text-center">1</td>
-                                    <td class="text-nowrap">سمفونی مردگان</td>
-                                    <td>k5675</td>
-                                    <td>انتشارات رسا</td>
-                                    <td class="text-center">200000</td>
-                                    <td class="text-center">1397/12/09</td>
-                                    <td class="text-center">
-                                        <label class="badge badge-success btn-block">منتشر شده</label>
-                                    </td>
-                                    <td class="text-center">
-                                        <a class="btn btn-info btn-icon"><i class="fa fa-eye text-white"></i></a>
-                                        <a class="btn btn-success btn-icon"><i class="fa fa-edit text-white"></i></a>
-                                        <a class="btn btn-danger btn-icon"><i class="fa fa-trash text-white"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-center">2</td>
-                                    <td class="text-nowrap">دوست داشتم کسی جایی منتظرم باشد</td>
-                                    <td>Kg900</td>
-                                    <td>انتشارات رسا</td>
-                                    <td class="text-center">150000</td>
-                                    <td class="text-center">1397/08/06</td>
-                                    <td class="text-center">
-                                        <label class="badge badge-warning btn-block">پیش نویس</label>
-                                    </td>
-                                    <td class="text-center">
-                                        <a class="btn btn-info btn-icon"><i class="fa fa-eye text-white"></i></a>
-                                        <a class="btn btn-success btn-icon"><i class="fa fa-edit text-white"></i></a>
-                                        <a class="btn btn-danger btn-icon"><i class="fa fa-trash text-white"></i></a>
-                                    </td>
-                                </tr>
+                                @{ int i = 1;}
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td class="text-center">@i.ToString()</td>
+                                        <td class="text-nowrap">@item.Title</td>
+                                        <td>@item.ISBN</td>
+                                        <td>@item.PublisherName</td>
+                                        <td>@item.Author</td>
+                                        <td></td>
+                                        <td class="text-center">@item.Price</td>
+                                        <td class="text-center">@item.PublishDate</td>
+                                        <td class="text-center">
+                                            @if (item.IsPublish == true)
+                                            {
+                                                <label class="badge badge-success btn-block">منتشر شده</label>
+                                            }
+                                            else
+                                            {
+                                                <label class="badge badge-info btn-block">پیشنویس</label>
+                                            }
+                                        </td>
+                                        <td class="text-center">
+                                            <a class="btn btn-info btn-icon"><i class="fa fa-eye text-white"></i></a>
+                                            <a class="btn btn-success btn-icon"><i class="fa fa-edit text-white"></i></a>
+                                            <a class="btn btn-danger btn-icon"><i class="fa fa-trash text-white"></i></a>
+                                        </td>
+                                    </tr>
+                                }
                             </tbody>
                         </table>
                         <nav class="text-center">

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using MVCEntityFrameWork.Models;
 using MVCEntityFrameWork.Models.Repository;
 using MVCEntityFrameWork.Models.ViewModels;
@@ -24,7 +25,79 @@ namespace MVCEntityFrameWork.Areas.Admin.Controllers
         }
         public IActionResult Index()
         {
-            return View();
+            string AuthorName = "";
+            string TranslatorName = "";
+            List<BooksIndexViewModel> BooksViewModel = new List<BooksIndexViewModel>();
+            //var Books = (from b in _context.Books 
+            //            join p in _context.Publishers on b.PublisherID equals p.PublisherID
+            //            join u in _context.Author_Books on b.BookID equals u.BookID
+            //            join a in _context.Authors on u.AuthorID equals a.AuthorID
+            //            where b.Delete == false
+            //            select new BooksIndexViewModel
+            //            {
+            //                BookId = b.BookID,
+            //                ISBN = b.ISBN,
+            //                IsPublish = b.IsPublish,
+            //                Price = b.Price,
+            //                PublishDate = b.PublishDate,
+            //                Stock = b.Stock,
+            //                Title = b.Title,
+            //                PublisherName=p.PublisherName,
+            //                Author= a.FirstName + " " + a.LastName,
+            //            }).GroupBy(b=>b.BookId).Select(g=> new { BookID=g.Key, BookGroups=g }).ToList();
+
+            var Books = (from u in _context.Author_Books
+                        .Include(a => a.Author)
+                        .Include(b=>b.Book)
+                        .ThenInclude(p=>p.publisher)
+                        .Include(b => b.Book)
+                        //.ThenInclude(tt => tt.Book_Translator)
+                        //.ThenInclude(t=>t.Translator)
+                         where (u.Book.Delete==false)
+                        select new BooksIndexViewModel
+                        {
+                            Author = u.Author.FirstName + " " + u.Author.LastName,
+                             BookId = u.Book.BookID,
+                            ISBN = u.Book.ISBN,
+                            IsPublish = u.Book.IsPublish,
+                            Price = u.Book.Price,
+                            PublishDate = u.Book.PublishDate,
+                            PublisherName = u.Book.publisher.PublisherName,
+                            Stock = u.Book.Stock,
+                            Title = u.Book.Title,
+                        }).GroupBy(b => b.BookId).Select(g => new { BookID = g.Key, BookGroups = g }).ToList();
+            foreach (var item in Books)
+            {
+                AuthorName = "";
+                TranslatorName = "";
+                foreach (var itemGroup in item.BookGroups)
+                {
+                    if (AuthorName == "")
+                        AuthorName = itemGroup.Author;
+                    else
+                        AuthorName = AuthorName + " - " + itemGroup.Author;
+
+                    //if (TranslatorName == "")
+                    //    TranslatorName = itemGroup.Translator;
+                    //else
+                    //    TranslatorName = TranslatorName + " - " + itemGroup.Translator;
+                }
+                BooksIndexViewModel vm = new BooksIndexViewModel()
+                {
+                    Author =AuthorName,
+                    Translator= TranslatorName,
+                    BookId = item.BookID,
+                    ISBN = item.BookGroups.First().ISBN,
+                    IsPublish = item.BookGroups.First().IsPublish,
+                    Price = item.BookGroups.First().Price,
+                    PublishDate = item.BookGroups.First().PublishDate,
+                    PublisherName = item.BookGroups.First().PublisherName,
+                    Stock = item.BookGroups.First().Stock,
+                    Title = item.BookGroups.First().Title
+                };
+                BooksViewModel.Add(vm);
+            }
+            return View(BooksViewModel);
         }
         public IActionResult Create()
         {
