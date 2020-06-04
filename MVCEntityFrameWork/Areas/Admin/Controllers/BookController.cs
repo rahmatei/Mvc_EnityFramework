@@ -5,10 +5,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using MVCEntityFrameWork.Models;
 using MVCEntityFrameWork.Models.Repository;
 using MVCEntityFrameWork.Models.ViewModels;
+using ReflectionIT.Mvc.Paging;
 
 namespace MVCEntityFrameWork.Areas.Admin.Controllers
 {
@@ -23,10 +25,16 @@ namespace MVCEntityFrameWork.Areas.Admin.Controllers
             _context = context;
             _repository = repository;
         }
-        public IActionResult Index()
+        public IActionResult Index(int page=1,int row=5)
         {
             string AuthorName = "";
             string TranslatorName = "";
+            List<int> RowsCount = new List<int>()
+            {
+                5,10,15,20
+            };
+            ViewBag.RowID = new SelectList(RowsCount,row);
+            ViewBag.NumOfPage = (page - 1) * row + 1;
             List<BooksIndexViewModel> BooksViewModel = new List<BooksIndexViewModel>();
             //var Books = (from b in _context.Books 
             //            join p in _context.Publishers on b.PublisherID equals p.PublisherID
@@ -97,7 +105,12 @@ namespace MVCEntityFrameWork.Areas.Admin.Controllers
                 };
                 BooksViewModel.Add(vm);
             }
-            return View(BooksViewModel);
+            var PagingModel = PagingList.Create(BooksViewModel, row, page);
+            PagingModel.RouteValue = new RouteValueDictionary
+            {
+                {"row",row}
+            };
+            return View(PagingModel);
         }
         public IActionResult Create()
         {

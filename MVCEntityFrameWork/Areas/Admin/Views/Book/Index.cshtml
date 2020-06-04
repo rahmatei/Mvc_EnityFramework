@@ -1,5 +1,7 @@
-﻿@model IEnumerable<MVCEntityFrameWork.Models.ViewModels.BooksIndexViewModel>;
+﻿@model ReflectionIT.Mvc.Paging.PagingList<MVCEntityFrameWork.Models.ViewModels.BooksIndexViewModel>;
 @inject MVCEntityFrameWork.Classes.ConvertDate convertDate
+@using ReflectionIT.Mvc.Paging
+@addTagHelper*,ReflectionIT.Mvc.Paging
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     ViewData["Title"] = "Index";
@@ -13,14 +15,30 @@
                 لیست کتاب ها
             </div>
             <div class="card-body">
-                <div class="col-md-4 mb-3 padding-0px">
-                    <div class="input-group">
-                        <span class="input-group-btn">
-                            <button type="button" class="btn btn-primary"><i class="fa fa-search"></i> جستجو</button>
-                        </span>
-                        <input id="input-group-1" name="input1-group2" class="form-control" placeholder="عنوان کتاب را واردکنید ..." type="text">
+                <div class="row">
+                    <div class="col-md-4 mb-3 padding-0px">
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-primary"><i class="fa fa-search"></i> جستجو</button>
+                            </span>
+                            <input id="input-group-1" name="input1-group2" class="form-control" placeholder="عنوان کتاب را واردکنید ..." type="text">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <form class="px-3">
+                            <div class="row form-group">
+                                <label class="ml-2">تعداد ردیف</label>
+                                <div class="col-md-4 form-group padding-0px">
+                                    <select class="select2" name="row" asp-items="@ViewBag.RowID"></select>
+                                </div>
+                                <div class="col-md-3 padding-0px">
+                                    <input type="submit" value="نمایش بده" class="btn btn-primary float-left" />
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
+                
                 <p>
                     <a class="btn btn-primary btn-block" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
                         جستجوی پیشرفته کتاب
@@ -112,11 +130,11 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @{ int i = 1;}
+                            @{ int i = ViewBag.NumOfPage;}
                             @foreach (var item in Model)
                             {
                                 <tr>
-                                    <td class="text-center">@i.ToString()</td>
+                                    <td class="text-center">@i</td>
                                     <td class="text-nowrap">@item.Title</td>
                                     <td>@item.ISBN</td>
                                     <td>@item.PublisherName</td>
@@ -126,7 +144,7 @@
                                     <td class="text-center">
                                         @if (item.PublishDate != null)
                                         {
-                                             @convertDate.ConvertMiladiToShamsi((DateTime)item.PublishDate)
+                                            @convertDate.ConvertMiladiToShamsi((DateTime)item.PublishDate)
                                         }
                                         else
                                         {
@@ -149,24 +167,17 @@
                                         <a class="btn btn-danger btn-icon"><i class="fa fa-trash text-white"></i></a>
                                     </td>
                                 </tr>
+                                i++;
                             }
                         </tbody>
                     </table>
-                    <nav class="text-center">
-                        <ul class="pagination">
-                            <li class="page-item disabled">
-                                <a class="page-link" href="#" tabindex="-1">قبلی</a>
-                            </li>
-                            <li class="page-item"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item active">
-                                <a class="page-link" href="#">2 <span class="sr-only">(current)</span></a>
-                            </li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">بعدی</a>
-                            </li>
-                        </ul>
+                    <nav>
+                        @await this.Component.InvokeAsync("Pager", new { PagingList = this.Model })
                     </nav>
+                    <!--<nav aria-label="Products navigation example">
+                        @Html.Partial("SmallPager", this.Model)
+                    </nav>-->
+                    <!--<vc:pager paging-list="@Model"></vc:pager>-->
                 </div>
             </div>
         </div>
