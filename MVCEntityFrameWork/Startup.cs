@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
+using MVCEntityFrameWork.Classes;
 using MVCEntityFrameWork.Models;
 using MVCEntityFrameWork.Models.Repository;
 
@@ -36,6 +37,7 @@ namespace MVCEntityFrameWork
             });
 
             services.AddTransient<BookRepository>();
+            services.AddTransient<ConvertDate>();
             services.AddDbContext<BookShopDBContext>(option => option.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddLocalization(options => { options.ResourcesPath = "Resources"; });
             services.AddMvc(options =>
