@@ -25,16 +25,18 @@ namespace MVCEntityFrameWork.Areas.Admin.Controllers
             _context = context;
             _repository = repository;
         }
-        public IActionResult Index(int page=1,int row=5)
+        public IActionResult Index(int page=1,int row=5,string sortExpression = "Title", string title="")
         {
             string AuthorName = "";
             string TranslatorName = "";
+            title = String.IsNullOrEmpty(title) ? "" : title;
             List<int> RowsCount = new List<int>()
             {
                 5,10,15,20
             };
             ViewBag.RowID = new SelectList(RowsCount,row);
             ViewBag.NumOfPage = (page - 1) * row + 1;
+            ViewBag.Search = title;
             List<BooksIndexViewModel> BooksViewModel = new List<BooksIndexViewModel>();
             //var Books = (from b in _context.Books 
             //            join p in _context.Publishers on b.PublisherID equals p.PublisherID
@@ -61,11 +63,11 @@ namespace MVCEntityFrameWork.Areas.Admin.Controllers
                         .Include(b => b.Book)
                         //.ThenInclude(tt => tt.Book_Translator)
                         //.ThenInclude(t=>t.Translator)
-                         where (u.Book.Delete==false)
+                         where (u.Book.Delete==false && u.Book.Title.Contains(title.TrimEnd().TrimStart()))
                         select new BooksIndexViewModel
                         {
                             Author = u.Author.FirstName + " " + u.Author.LastName,
-                             BookId = u.Book.BookID,
+                            BookID = u.Book.BookID,
                             ISBN = u.Book.ISBN,
                             IsPublish = u.Book.IsPublish,
                             Price = u.Book.Price,
@@ -73,7 +75,7 @@ namespace MVCEntityFrameWork.Areas.Admin.Controllers
                             PublisherName = u.Book.publisher.PublisherName,
                             Stock = u.Book.Stock,
                             Title = u.Book.Title,
-                        }).GroupBy(b => b.BookId).Select(g => new { BookID = g.Key, BookGroups = g }).ToList();
+                        }).GroupBy(b => b.BookID).Select(g => new { BookID = g.Key, BookGroups = g }).ToList();
             foreach (var item in Books)
             {
                 AuthorName = "";
@@ -94,7 +96,7 @@ namespace MVCEntityFrameWork.Areas.Admin.Controllers
                 {
                     Author =AuthorName,
                     Translator= TranslatorName,
-                    BookId = item.BookID,
+                    BookID = item.BookID,
                     ISBN = item.BookGroups.First().ISBN,
                     IsPublish = item.BookGroups.First().IsPublish,
                     Price = item.BookGroups.First().Price,
@@ -105,10 +107,11 @@ namespace MVCEntityFrameWork.Areas.Admin.Controllers
                 };
                 BooksViewModel.Add(vm);
             }
-            var PagingModel = PagingList.Create(BooksViewModel, row, page);
+            var PagingModel = PagingList.Create(BooksViewModel, row, page, sortExpression, "Title");
             PagingModel.RouteValue = new RouteValueDictionary
             {
-                {"row",row}
+                {"row",row },
+                {"title",title }
             };
             return View(PagingModel);
         }

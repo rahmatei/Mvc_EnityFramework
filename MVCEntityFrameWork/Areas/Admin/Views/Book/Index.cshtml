@@ -15,17 +15,19 @@
                 لیست کتاب ها
             </div>
             <div class="card-body">
-                <div class="row">
-                    <div class="col-md-4 mb-3 padding-0px">
-                        <div class="input-group">
-                            <span class="input-group-btn">
-                                <button type="button" class="btn btn-primary"><i class="fa fa-search"></i> جستجو</button>
-                            </span>
-                            <input id="input-group-1" name="input1-group2" class="form-control" placeholder="عنوان کتاب را واردکنید ..." type="text">
+                <form class="px-3">
+                    <div class="row">
+
+                        <div class="col-md-4 mb-3 padding-0px">
+                            <div class="input-group">
+                                <span class="input-group-btn">
+                                    <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> جستجو</button>
+                                </span>
+                                <input id="input-group-1" name="title" class="form-control" placeholder="عنوان کتاب را واردکنید ..." type="text">
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-4">
-                        <form class="px-3">
+                        <div class="col-md-4">
+
                             <div class="row form-group">
                                 <label class="ml-2">تعداد ردیف</label>
                                 <div class="col-md-4 form-group padding-0px">
@@ -35,10 +37,15 @@
                                     <input type="submit" value="نمایش بده" class="btn btn-primary float-left" />
                                 </div>
                             </div>
-                        </form>
+                        </div>
+                        @if (ViewBag.Search != "")
+                        {
+                            <div class="col-md-4">
+                                <a href="/Admin/Book/Index" class="float-left"><i class="fa fa-arrow-circle-left"></i>  بازگشت به لیست کتاب ها   </a>
+                            </div>
+                        }
                     </div>
-                </div>
-                
+                </form>
                 <p>
                     <a class="btn btn-primary btn-block" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
                         جستجوی پیشرفته کتاب
@@ -118,14 +125,14 @@
                         <thead>
                             <tr>
                                 <th>ردیف</th>
-                                <th>عنوان</th>
-                                <th>شابک</th>
-                                <th>ناشر</th>
-                                <th>نویسندگان</th>
-                                <th>مترجمان</th>
-                                <th class="text-center">قیمت (ریال)</th>
-                                <th class="text-center">تاریخ انتشار در سایت</th>
-                                <th style="width:25px;">وضعیت</th>
+                                <th>@Html.SortableHeaderFor(model => model.Title, "Title")</th>
+                                <th>@Html.SortableHeaderFor(model => model.ISBN, "ISBN")</th>
+                                <th>@Html.SortableHeaderFor(model => model.PublisherName, "PublisherName")</th>
+                                <th>@Html.SortableHeaderFor(model => model.Author, "Author")</th>
+                                <th>موجودی</th>
+                                <th>@Html.SortableHeaderFor(model => model.Price, "Price")</th>
+                                <th class="text-center">@Html.SortableHeaderFor(model => model.PublishDate, "PublishDate")</th>
+                                <th class="text-center">@Html.SortableHeaderFor(model => model.IsPublish, "IsPublish")</th>
                                 <th>عملیات</th>
                             </tr>
                         </thead>
@@ -175,8 +182,8 @@
                         @await this.Component.InvokeAsync("Pager", new { PagingList = this.Model })
                     </nav>
                     <!--<nav aria-label="Products navigation example">
-                        @Html.Partial("SmallPager", this.Model)
-                    </nav>-->
+            @Html.Partial("SmallPager", this.Model)
+        </nav>-->
                     <!--<vc:pager paging-list="@Model"></vc:pager>-->
                 </div>
             </div>

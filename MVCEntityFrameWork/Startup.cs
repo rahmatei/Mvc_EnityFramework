@@ -14,6 +14,7 @@ using Microsoft.Extensions.Localization;
 using MVCEntityFrameWork.Classes;
 using MVCEntityFrameWork.Models;
 using MVCEntityFrameWork.Models.Repository;
+using ReflectionIT.Mvc.Paging;
 
 namespace MVCEntityFrameWork
 {
@@ -47,6 +48,12 @@ namespace MVCEntityFrameWork
                 options.ModelBindingMessageProvider.SetValueMustNotBeNullAccessor(
                  (x) => L["انتخاب یکی از موارد لیست الزامی است."]);
 
+            });
+            services.AddPaging(option =>
+            {
+                option.ViewName = "Bootstrap4";
+                option.HtmlIndicatorDown = "<i class='fa fa-sort-amount-down'></i>";
+                option.HtmlIndicatorUp = "<i class='fa fa-sort-amount-up'></i>";
             });
             
         }
