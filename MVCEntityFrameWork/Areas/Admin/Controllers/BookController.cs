@@ -167,5 +167,29 @@ namespace MVCEntityFrameWork.Areas.Admin.Controllers
             }
             
         }
+        public IActionResult DetailsBook(int id)
+        {
+            var Books = _context.Books.FromSql("Select * from BookInfo where BookID={0}"
+                                               , id)
+                                                .Include(l => l.Language)
+                                                .Include(p => p.publisher).First();
+            ViewBag.Authors = (from a in _context.Author_Books
+                              join aa in _context.Authors on a.AuthorID equals aa.AuthorID
+                              where a.BookID == id
+                              select new Author { FirstName = aa.FirstName, LastName = aa.LastName }).ToList();
+            //ViewBag.Authors = _context.Authors.FromSql("EXEC dbo.GetAuthorsByBookID {0}", id).ToList();
+
+            ViewBag.Translators = (from r in _context.Book_Translators
+                                   join t in _context.Translator on r.TranslatorID equals t.TranslatorID
+                                   where (r.BookID == id)
+                                   select new Translator { Name = t.Name, Family = t.Family }).ToList();
+
+            ViewBag.Categories = (from o in _context.Book_Categories
+                                  join c in _context.Categories on o.CategoryID equals c.CategoryID
+                                  where (o.BookID == id)
+                                  select new Category { CategoryName = c.CategoryName }).ToList();
+
+            return View(Books);
+        }
     }
 }
