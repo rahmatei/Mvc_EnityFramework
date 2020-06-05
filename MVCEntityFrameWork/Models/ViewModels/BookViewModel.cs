@@ -106,5 +106,17 @@ namespace MVCEntityFrameWork.Models.ViewModels
         [Display(Name = "نویسندگان")]
         public string Author { get; set; }
         public string Translator { get; set; }
+        public string Language { get; set; }
+        public string Category { get; set; }
+
+    }
+    public class AdvancedSearchViewModel{
+        public string Title { get; set; }
+        public string ISBN { get; set; }
+        public string Author { get; set; }
+        public string Publisher { get; set; }
+        public string Language { get; set; }
+        public string Translator { get; set; }
+        public string Category { get; set; }
     }
 }
