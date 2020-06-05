@@ -19,7 +19,7 @@ namespace MVCEntityFrameWork.Models.Repository
         {
             var Categories = (from c in _context.Categories
                               where (c.ParentCategoryID == null)
-                              select new TreeViewCategory { CategoryID = c.CategoryID, CategoryName = c.CategoryName }).ToList();
+                              select new TreeViewCategory { id = c.CategoryID, title = c.CategoryName }).ToList();
 
             foreach (var item in Categories)
             {
@@ -31,12 +31,12 @@ namespace MVCEntityFrameWork.Models.Repository
         public void BindSubCategory(TreeViewCategory category)
         {
             var subcategory = (from c in _context.Categories
-                               where (c.ParentCategoryID == category.CategoryID)
-                               select new TreeViewCategory { CategoryID = c.CategoryID, CategoryName = c.CategoryName });
+                               where (c.ParentCategoryID == category.id)
+                               select new TreeViewCategory { id = c.CategoryID, title = c.CategoryName });
             foreach (var item in subcategory)
             {
                 BindSubCategory(item);
-                category.SubCategories.Add(item);
+                category.subs.Add(item);
             }
         }
 

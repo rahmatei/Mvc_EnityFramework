@@ -113,6 +113,7 @@ namespace MVCEntityFrameWork.Areas.Admin.Controllers
                 {"row",row },
                 {"title",title }
             };
+            ViewBag.Categories = _repository.GenerateAllTree();
             return View(PagingModel);
         }
         public IActionResult Create()

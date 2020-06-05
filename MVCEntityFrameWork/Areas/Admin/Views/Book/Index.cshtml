@@ -80,10 +80,7 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label class="form-control-label">دسته بندی</label>
-                                        <select class="select2 js-states form-control">
-                                            <option>فارسی</option>
-                                            <option>عربی</option>
-                                        </select>
+                                        <input type="text" id="justAnotherInputBox" placeholder="جستجو کنید" />
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -190,3 +187,13 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    var SampleJSONData = @Html.Raw(Json.Serialize(ViewBag.Categories));
+    var comboTree2;
+
+jQuery(document).ready(function($) {
+		comboTree2 = $('#justAnotherInputBox').comboTree({
+			source : SampleJSONData,
+			isMultiple: false
+		});
+});</script>
